@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import "./AccessControl.sol";
 
-abstract contract TimelockManager is EvictionAccessControl {
+abstract contract Timelock is EvictionAccessControl {
     struct Transaction {
         address to;
         uint256 value;

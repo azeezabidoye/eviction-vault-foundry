@@ -2,9 +2,9 @@
 pragma solidity ^0.8.20;
 
 import "./VaultCore.sol";
-import "./TimelockManager.sol";
+import "./Timelock.sol";
 
-contract EvictionVault is VaultCore, TimelockManager {
+contract EvictionVault is VaultCore, Timelock {
     constructor(
         address[] memory _owners,
         uint256 _threshold
