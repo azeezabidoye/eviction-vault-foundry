@@ -41,6 +41,12 @@ The project incorporates comprehensive Foundry testing in `test/EvictionVault.t.
 - Pause features properly shut down activity across actions.
 - The emergency withdrawal safely flushes funds.
 
+## Deployment
+
+The `EvictionVault.s.sol` file handles the deployment script for the project
+
+Test addresses are generated via [Vanity-eth platform](https://vanity-eth.tk/)
+
 ### Running Tests
 
 ```bash
