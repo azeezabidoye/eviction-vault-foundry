@@ -4,6 +4,8 @@
 
 This project is a refactoring of the `EvictionVault.sol` smart contract, which was previously a single-file application with major vulnerabilities.
 
+Initial code is provide in the `EvictionVault.txt` file in the main project directory.
+
 ## Refactoring Structure
 
 The codebase was modularized to increase maintainability, follow best practices, and implement safe architectural principles. The logic is now separated into various parts:
@@ -27,3 +29,14 @@ The codebase was modularized to increase maintainability, follow best practices,
    Withdraw and claim operations utilized the insecure `.transfer()` gas-limited function. This has been entirely replaced with `.call{value: amount}("")` along with comprehensive success verifications.
 6. **Timelock Execution Bypass:**
    The original contract permitted bypassing the timelock when `threshold` was set to 1. The delay calculation has been refactored to explicitly ensure the delay and expiration bounds even if `threshold == 1`.
+
+## Local Testing & Verification
+
+The project incorporates comprehensive Foundry testing in `test/EvictionVault.t.sol`:
+
+- Authorized updates to the Merkle root work securely over timelocks.
+- Unauthorized callers are now properly reverted.
+- Funds deposits and withdrawals correctly register in the balances.
+- Transacting prematurely before the timelock concludes are now reverted.
+- Pause features properly shut down activity across actions.
+- The emergency withdrawal safely flushes funds.
