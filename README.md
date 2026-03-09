@@ -40,3 +40,19 @@ The project incorporates comprehensive Foundry testing in `test/EvictionVault.t.
 - Transacting prematurely before the timelock concludes are now reverted.
 - Pause features properly shut down activity across actions.
 - The emergency withdrawal safely flushes funds.
+
+### Running Tests
+
+```bash
+forge test -vvv
+```
+
+### Installing packages
+
+Install the `@openzeppelin/contracts` NPM package, simply run:
+
+```bash
+npm install @openzeppelin/contracts
+```
+
+Package has been remapped for utilization in the `remappings.txt` file provided in the project main directory.
