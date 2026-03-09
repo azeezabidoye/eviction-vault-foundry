@@ -13,13 +13,13 @@ contract EvictionVaultTest is Test {
 
     address[] owners;
 
-    address user = address(0x201);
+    address user1 = address(0x201);
     address user2 = address(0x202);
 
     function setUp() public {
-        vm.deal(user, 10 ether);
-        vm.deal(user2, 10 ether);
-        vm.deal(owner1, 10 ether);
+        vm.deal(user1, 10e18);
+        vm.deal(user2, 10e18);
+        vm.deal(owner1, 10e18);
 
         owners.push(owner1);
         owners.push(owner2);
@@ -55,27 +55,27 @@ contract EvictionVaultTest is Test {
     function test_RevertIf_UnauthorizedUserCannotUpdateMerkleRoot() public {
         bytes32 newRoot = keccak256("newRoot");
 
-        vm.prank(user);
+        vm.prank(user1);
         vm.expectRevert("Only vault can call");
         vault.setMerkleRoot(newRoot);
     }
 
     // 3. Withdrawals work correctly
     function test_WithdrawalsWorkCorrectly() public {
-        uint256 depositAmt = 1 ether;
+        uint256 depositAmt = 1e18;
 
-        vm.prank(user);
+        vm.prank(user1);
         vault.deposit{value: depositAmt}();
 
-        assertEq(vault.balances(user), depositAmt);
+        assertEq(vault.balances(user1), depositAmt);
 
-        uint256 initialBal = user.balance;
+        uint256 initialBal = user1.balance;
 
-        vm.prank(user);
+        vm.prank(user1);
         vault.withdraw(depositAmt);
 
-        assertEq(vault.balances(user), 0);
-        assertEq(user.balance, initialBal + depositAmt);
+        assertEq(vault.balances(user1), 0);
+        assertEq(user1.balance, initialBal + depositAmt);
     }
 
     // 4. Timelock protections function properly
@@ -117,21 +117,21 @@ contract EvictionVaultTest is Test {
         assertTrue(vault.paused());
 
         // Test pausing prevents withdrawal
-        vm.prank(user);
-        vault.deposit{value: 1 ether}();
+        vm.prank(user1);
+        vault.deposit{value: 1e18}();
 
         vm.expectRevert("Contract is paused");
-        vm.prank(user);
+        vm.prank(user1);
         vault.withdraw(1 ether);
     }
 
     // 6. Emergency withdraw works via authorized workflow
     function test_EmergencyWithdrawAll() public {
-        vm.prank(user);
-        vault.deposit{value: 5 ether}();
+        vm.prank(user1);
+        vault.deposit{value: 5e18}();
 
         vm.prank(user2);
-        vault.deposit{value: 4 ether}();
+        vault.deposit{value: 4e18}();
 
         address payable testReceiver = payable(address(0x999));
 
@@ -151,7 +151,7 @@ contract EvictionVaultTest is Test {
 
         vault.executeTransaction(txId);
 
-        assertEq(testReceiver.balance, 9 ether);
+        assertEq(testReceiver.balance, 9e18);
         assertEq(vault.totalVaultValue(), 0);
     }
 }
